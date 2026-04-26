@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>William Eidsness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --fg: #0e0e0e;
+      --bg: #f5f2eb;
+      --accent: #c0390f;
+      --accent2: #1a3a6b;
+      --mid: #d4d0c7;
+      --muted: #6b6860;
+      --card: #ffffff;
+      --mono: 'Space Mono', monospace;
+      --display: 'Bebas Neue', sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fg: #f0ede4;
+        --bg: #111110;
+        --accent: #e04a1a;
+        --accent2: #4a7ac7;
+        --mid: #2a2926;
+        --muted: #8a8780;
+        --card: #1c1b18;
+      }
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--mono);
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.045'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.6;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      border-bottom: 2px solid var(--fg);
+      padding: 3.5rem 0 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-name {
+      font-family: var(--display);
+      font-size: clamp(4.5rem, 13vw, 10rem);
+      line-height: 0.88;
+      letter-spacing: 0.02em;
+      color: var(--fg);
+    }
+
+    .hero-name span {
+      color: var(--accent);
+    }
+
+    .hero-handle {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 1.4rem;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-handle span::before {
+      content: '// ';
+      color: var(--accent);
+    }
+
+    .big-bg-text {
+      font-family: var(--display);
+      font-size: clamp(7rem, 22vw, 16rem);
+      color: var(--mid);
+      position: absolute;
+      right: -1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      line-height: 1;
+      pointer-events: none;
+      letter-spacing: -0.04em;
+      opacity: 0.3;
+      user-select: none;
+    }
+
+    /* ── SECTION ── */
+    .section {
+      margin-top: 3.5rem;
+    }
+
+    .section-label {
+      font-family: var(--display);
+      font-size: 2.4rem;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--mid);
+      padding-bottom: 0.3rem;
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.85rem;
+    }
+
+    .section-label .num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.18em;
+      font-weight: 400;
+    }
+
+    /* ── PROJECTS GRID ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--mid);
+      background: var(--mid);
+    }
+
+    .project-card {
+      background: var(--card);
+      padding: 1.4rem 1.6rem;
+      transition: background 0.2s ease;
+    }
+
+    .project-card:hover {
+      background: var(--bg);
+    }
+
+    .project-tag {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.55rem;
+    }
+
+    .project-title {
+      font-family: var(--display);
+      font-size: 1.6rem;
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      margin-bottom: 0.7rem;
+      color: var(--fg);
+    }
+
+    .project-desc {
+      font-size: 12px;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .project-status {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 1.1rem;
+      padding: 3px 9px;
+      border: 1px solid var(--accent2);
+      color: var(--accent2);
+    }
+
+    /* ── THOUGHTS ── */
+    .thoughts-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .thought-item {
+      border-bottom: 1px solid var(--mid);
+      padding: 1.2rem 0;
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 1.2rem;
+      align-items: start;
+    }
+
+    .thought-num {
+      font-family: var(--display);
+      font-size: 1.5rem;
+      color: var(--mid);
+      line-height: 1;
+      padding-top: 3px;
+    }
+
+    .thought-text {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--fg);
+    }
+
+    /* ── CONTACT ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--mid);
+      background: var(--mid);
+    }
+
+    .contact-item {
+      background: var(--card);
+      padding: 1.1rem 1.4rem;
+      transition: background 0.2s ease;
+      text-decoration: none;
+      display: block;
+      cursor: default;
+    }
+
+    a.contact-item {
+      cursor: pointer;
+    }
+
+    .contact-item:hover {
+      background: var(--bg);
+    }
+
+    .contact-platform {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .contact-handle {
+      font-family: var(--display);
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
+      color: var(--fg);
+      word-break: break-all;
+    }
+
+    .contact-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 0.45rem;
+      font-style: italic;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 4rem;
+      border-top: 1px solid var(--mid);
+      padding-top: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero {
+      animation: fadeUp 0.55s ease both;
+    }
+
+    .section {
+      animation: fadeUp 0.55s ease both;
+    }
+
+    .section:nth-of-type(1) { animation-delay: 0.05s; }
+    .section:nth-of-type(2) { animation-delay: 0.15s; }
+    .section:nth-of-type(3) { animation-delay: 0.25s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .page {
+        padding: 0 1.2rem 4rem;
+      }
+
+      .hero-handle {
+        gap: 1rem;
+      }
+
+      .big-bg-text {
+        opacity: 0.15;
+      }
+
+      .contact-grid,
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header class="hero">
+      <div class="big-bg-text" aria-hidden="true">WE</div>
+      <p class="hero-tag">Engineer &mdash; Builder &mdash; Tinkerer</p>
+      <h1 class="hero-name">William<br><span>Eidsness</span></h1>
+      <div class="hero-handle" aria-label="Handles: gearshaft and itswillderness">
+        <span>gearshaft</span>
+        <span>itswillderness</span>
+      </div>
+    </header>
+
+    <main>
+
+      <section class="section" aria-labelledby="projects-heading">
+        <div class="section-label">
+          <span class="num" aria-hidden="true">01 &mdash;</span>
+          <h2 id="projects-heading">Current Projects</h2>
+        </div>
+        <div class="projects-grid">
+
+          <article class="project-card">
+            <p class="project-tag">Game Dev</p>
+            <h3 class="project-title">Minecraft Datapack</h3>
+            <p class="project-desc">A new datapack in the vein of Mace Roulette &mdash; rewriting the rules of combat with chaotic, emergent mechanics.</p>
+            <span class="project-status">In Progress</span>
+          </article>
+
+          <article class="project-card">
+            <p class="project-tag">Automotive Design</p>
+            <h3 class="project-title">Hybrid Hypercar</h3>
+            <p class="project-desc">A hybrid hypercar concept featuring a novel CVT design and a distinctive form factor that breaks from convention.</p>
+            <span class="project-status">Design Phase</span>
+          </article>
+
+          <article class="project-card">
+            <p class="project-tag">Systems / Software</p>
+            <h3 class="project-title">Universal Nav System</h3>
+            <p class="project-desc">A universal navigation system &mdash; platform-agnostic, adaptable, and built to work anywhere orientation matters.</p>
+            <span class="project-status">R&amp;D</span>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="thoughts-heading">
+        <div class="section-label">
+          <span class="num" aria-hidden="true">02 &mdash;</span>
+          <h2 id="thoughts-heading">Random Thoughts</h2>
+        </div>
+        <div class="thoughts-list">
+
+          <div class="thought-item">
+            <div class="thought-num" aria-hidden="true">01</div>
+            <p class="thought-text">why does everyone seem to think louder is better? sometimes it&rsquo;s better to be quiet and stay out of sight.</p>
+          </div>
+
+          <div class="thought-item">
+            <div class="thought-num" aria-hidden="true">02</div>
+            <p class="thought-text">if you throw a ball past the edge of the universe, what happens? if it bounces back, there&rsquo;s something there. if it keeps going, there must be something there for it to exist in. if it simply disappears, it must have gone somewhere.</p>
+          </div>
+
+          <div class="thought-item">
+            <div class="thought-num" aria-hidden="true">03</div>
+            <p class="thought-text">the baroque era has to be earth&rsquo;s most beautiful time. people try and replicate it, but if only we could truly represent what it was like.</p>
+          </div>
+
+          <div class="thought-item">
+            <div class="thought-num" aria-hidden="true">04</div>
+            <p class="thought-text">why is it that no problems really need solving? you can only get so complicated before you hit the limit. I want to make something exceptional, but I always hit a wall.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="contact-heading">
+        <div class="section-label">
+          <span class="num" aria-hidden="true">03 &mdash;</span>
+          <h2 id="contact-heading">Contact</h2>
+        </div>
+        <div class="contact-grid">
+
+          <a class="contact-item" href="mailto:gearshaft01@gmail.com">
+            <p class="contact-platform">Email</p>
+            <p class="contact-handle">gearshaft01</p>
+            <p class="contact-note">@gmail.com</p>
+          </a>
+
+          <div class="contact-item">
+            <p class="contact-platform">Discord</p>
+            <p class="contact-handle">willderness001</p>
+            <p class="contact-note">preferred for quick chats</p>
+          </div>
+
+          <div class="contact-item">
+            <p class="contact-platform">Otherwise</p>
+            <p class="contact-handle">You know how.</p>
+            <p class="contact-note">if you know me, you know</p>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <span>// WILLIAM EIDSNESS</span>
+      <span>GEARSHAFT &middot; ITSWILLDERNESS</span>
+    </footer>
+
+  </div>
+</body>
+</html>
